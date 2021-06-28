@@ -56,6 +56,7 @@ text of
 [Tom Swift and His Airship](https://www.gutenberg.org/cache/epub/3005/pg3005.txt),
 from which the file `swift.txt` in this distribution was
 taken.
+`stand.txt` contains an excerpt of [Stephen King's The Stand](https://www.penguinrandomhouse.com/books/92992/the-stand-movie-tie-in-edition-by-stephen-king/).
 
 ## License
 
