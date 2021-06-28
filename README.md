@@ -46,7 +46,8 @@ where `input.txt` is the input file to be processed.
 
 When run using the file `sentence.txt` in this distribution,
 the program will produce a dominant letter count of 20. When
-run on `swift.txt` it will produce 71.
+run on `swift.txt` it will produce 71. When run on `stand.txt`
+it will produce 37.
 
 ## Acknowledgements
 
