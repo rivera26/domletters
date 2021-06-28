@@ -6,122 +6,118 @@
 // https://stackoverflow.com/questions/13035674/how-to-read-a-file-line-by-line-or-a-whole-text-file-at-once
 // https://www.geeksforgeeks.org/split-a-sentence-into-words-in-cpp/
 
-
 #include "domletters.h"
 
-string process(string input, int & count);
-int max_value(int array[]);
-
+int countDomletters(string input);
+int maxValue(int array[]);
 
 int main()
 {
-	string input;
-	string full_text;
-	int count = 0;
+    string input;
+    int count = 0;
 
-	while (getline(cin, input))
-	{
-		full_text += process(input, count);
-		full_text.push_back('\n');
-	}
-	
-	cout << full_text << endl;
-	cout << "FULL COUNT IS: " << count << endl;
+    while (getline(cin, input))
+    {
+        count += countDomletters(input);
+    }
 
-	return 0;
+    cout << count << endl;
+
+    return 0;
 }
 
-
-// This function processes the input text.
-// It returns a string
-string process(string input, int & count)
+// This function counts the dominant letters in the input text.
+// It returns an integer.
+int countDomletters(string input)
 {
-	int ascii[128];
-	int length = input.length();
-	string word = "";
-	string processed_text;
-	int i;
-	bool alpha_flag = true;
+    int count = 0;
+    int length = input.length();
+    string word = "";
+    int i;
+    bool alpha_flag = true;
+    int ascii[128];
 
-	for (i = 0; i < 128; ++i) // initialize array to zeroes
-	{
-		ascii[i] = 0;
-	}
+    for (i = 0; i < 128; ++i)
+    {
+        ascii[i] = 0;
+    }
 
-	for (i = 0; i <= length; ++i) { // iterate through the string
-		char ch = input[i];
-		int max_index = 0;
-		int max_val = 0;
+    // iterate through the string
+    for (i = 0; i <= length; ++i)
+    {
+        char ch = input[i];
+        int max_index = 0;
+        int max_val = 0;
 
-		if (isalpha(ch)) {
-			ascii[int(ch)] += 1; 
-			word = word + ch;
-		}
-		
-		else if (ch != ' ' && ch != '\0') {
+        if (isalpha(ch))
+        {
+            ascii[int(ch)] += 1;
+            word = word + ch;
+        }
+        else if (ch != ' ' && ch != '\0')
+        {
+            word = "";
+            alpha_flag = false;
 
-			word = word + ch;
-			processed_text += word;
-			word = "";
+            // reset array to zeroes
+            for (int j = 0; j < 128; ++j)
+            {
+                ascii[j] = 0;
+            }
+        }
+        else
+        {
+            max_val = maxValue(ascii);
+            max_index = distance(ascii, max_element(ascii, ascii + 128));
 
-			alpha_flag = false;
+            // Need to account for capital and lowercase
+            // versions of the same letter
+            if (max_index < 97)
+            {
+                max_val += ascii[max_index + 32];
+            }
+            else
+            {
+                max_val += ascii[max_index - 32];
+            }
 
-			for (int j = 0; j < 128; ++j) // reset array to zeroes
-			{
-				ascii[j] = 0;
-			}
-		}
+            // If the word has a non-alphabetic character,
+            // reset max_val.
+            if (alpha_flag == false)
+            {
+                max_val = 0;
+            }
 
-		else {
-			processed_text += word;
-			max_val = max_value(ascii);
-			max_index = distance(ascii, max_element(ascii, ascii + 128));
-			cout << "MAX INDEX IS: " << max_index << endl;
+            count += max_val;
+            word = "";
 
-			if (max_index < 97) {
-				max_val += ascii[max_index + 32];
-			}
-			else {
-				max_val += ascii[max_index - 32];
-			}
+            // reset array to zeroes
+            for (int j = 0; j < 128; ++j)
+            {
+                ascii[j] = 0;
+            }
 
-			if (alpha_flag == false) {
-				max_val = 0;
-			}
+            alpha_flag = true;
+        }
+    }
 
-			cout << "MAX VALUE IS: " << max_val << endl;
-
-			processed_text.push_back('(');
-			processed_text += to_string(max_val);
-			processed_text.push_back(')');
-			count += max_val;
-			
-			processed_text.push_back(' ');
-			word = "";
-			
-			for (int j = 0; j < 128; ++j) // reset array to zeroes
-			{
-				ascii[j] = 0;
-			}
-			
-			alpha_flag = true;
-		}
-	}
-
-	return processed_text;
+    return count;
 }
 
-int max_value(int array[]) {
+// This functions finds the max value in an integer array.
+// It returns an integer.
+int maxValue(int array[])
+{
+    int max = array[0];
+    int i;
 
-	int max = array[0];
-	int i;
+    for (i = 1; i < 128; ++i)
+    {
+        if (max < array[i])
+        {
+            max = array[i];
+        }
+    }
 
-	for(i = 1; i < 128; ++i)
-	{
-		if(max < array[i]) {
-			max = array[i];
-		}
-	}
-
-	return max;
+    return max;
 }

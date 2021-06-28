@@ -2,7 +2,6 @@
 // CS 561
 // Domletters
 
-
 #include <iostream>
 #include <string>
 #include <fstream>
